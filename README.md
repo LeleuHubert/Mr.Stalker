@@ -1,2 +1,2 @@
 # Mr.Stalker
-bot discorde destiné a motiver mes contactes a répondre rapidement  a mes messages.
+bot Discord to motivate my co-workers to respond quickly when an important question is asked in the channel. 
