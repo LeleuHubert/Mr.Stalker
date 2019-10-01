@@ -1,15 +1,14 @@
 ﻿using Discord;
-using Discord.Commands;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace Mr.Stalker
 {
-    public class Talk : ModuleBase 
+    public static class Talk
     {
-        static List<string> TalkMe = new List<string>()
+        static readonly List<string> TalkMe = new List<string>()
         {
-           {"Bouge toi, on t'attend" },
+            {"Bouge toi, on t'attend"},
             {"Sors toi les doigts du cul et réponds"},
             {"Réponds là !!!!"},
             {"On t'attend, sois réactif"},

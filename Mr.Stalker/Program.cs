@@ -11,9 +11,7 @@ namespace Mr.Stalker
 {
     class Program
     {
-
         public  DiscordSocketClient Client;
-        private CommandService Commande;
         public Random rnd;
         private Thread spamThread;
         public Talk.Spam spam;
@@ -30,7 +28,7 @@ namespace Mr.Stalker
             P = this;
             Client = new DiscordSocketClient(new DiscordSocketConfig()
             {
-                LogLevel = Discord.LogSeverity.Verbose
+                LogLevel = LogSeverity.Verbose
             });
 
             rnd = new Random();
@@ -38,15 +36,12 @@ namespace Mr.Stalker
             spam = null;
             spamThread = new Thread(Talk.Talker);
             spamThread.Start();
-            Commande = new CommandService();
-            await Commande.AddModuleAsync<Talk>(null);
 
             Client.MessageReceived += Client_MessageReceived;
 
             Client.Log += Client_Log;
-            Commande.Log += Commande_Log;
             await Client.LoginAsync(TokenType.Bot, File.ReadAllText("key.txt"));
-            await  Client.StartAsync();
+            await Client.StartAsync();
 
             await Task.Delay(-1);
         }
@@ -55,7 +50,7 @@ namespace Mr.Stalker
         {
             SocketUserMessage SUM = arg as SocketUserMessage;
 
-            if (SUM == null && arg.Author.IsBot)
+            if (SUM == null || arg.Author.IsBot)
                 return;
             if (spam != null && spam.User.Id == arg.Author.Id || (DateTime.Now.Subtract(DateTime.Now).TotalSeconds > 60000))
                 spam = null;
@@ -75,9 +70,6 @@ namespace Mr.Stalker
                     if (user != null)
                         spam = new Talk.Spam(user, chan);
                 }
-                SocketCommandContext context = new SocketCommandContext(Client, SUM);
-
-                await Commande.ExecuteAsync(context, pos, null);
 
             }
         }
@@ -88,7 +80,7 @@ namespace Mr.Stalker
             return Task.CompletedTask;
         }
 
-        private System.Threading.Tasks.Task Client_Log(Discord.LogMessage arg)
+        private Task Client_Log(LogMessage arg)
         {
             var cc = Console.ForegroundColor;
             switch (arg.Severity)
